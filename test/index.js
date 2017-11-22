@@ -67,6 +67,7 @@ describe('Unit tests for lib/index', function () {
             const getParams = localApi.__get__('getParams');
             const req = {
                 originalUrl: 'http://www.example.com/test?test-value=42',
+                _parsedUrl: {pathname: 'http://www.example.com/test'},
                 method: 'PATCH',
                 headers: {
                     'content-type': 'application/json',
@@ -87,15 +88,19 @@ describe('Unit tests for lib/index', function () {
             };
             const expectedResult = {
                 requestContext: {
-                    resourcePath: req.originalUrl,
+                    resourcePath: req._parsedUrl.pathname,
                     httpMethod: req.method
                 },
+                stageVariables: {
+                    environment: 'dev'
+                },
                 headers: req.headers,
+                pathParameters: {},
                 queryStringParameters: req.query,
-                body: req.body
+                body: JSON.stringify(req.body)
             };
 
-            const result = getParams(req);
+            const result = getParams(req, localApi);
 
             expect(result).to.deep.eql(expectedResult);
         });
@@ -199,6 +204,7 @@ describe('Unit tests for lib/index', function () {
             };
             const req = {
                 originalUrl: 'http://www.example.com/test?test-value=42',
+                _parsedUrl: {pathname: 'http://www.example.com/test'},
                 method: 'PATCH',
                 headers: {
                     'content-type': 'application/json',
@@ -219,12 +225,16 @@ describe('Unit tests for lib/index', function () {
             };
             const expectedParams = {
                 requestContext: {
-                    resourcePath: req.originalUrl,
+                    resourcePath: req._parsedUrl.pathname,
                     httpMethod: req.method
                 },
+                stageVariables: {
+                    environment: 'dev'
+                },
                 headers: req.headers,
+                pathParameters: {},
                 queryStringParameters: req.query,
-                body: req.body
+                body: JSON.stringify(req.body)
             };
             const app = {
                 proxyRouter: function (params, controlFlow) {
