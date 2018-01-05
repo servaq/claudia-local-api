@@ -1,0 +1,4 @@
+#!/usr/bin/env node --debug
+
+require('./claudia-local-api');
+

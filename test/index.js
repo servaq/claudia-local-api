@@ -7,6 +7,10 @@ const sinon = require('sinon');
 
 const localApi = rewire('../lib');
 
+var environment = process.env.environment || process.env.PROFILE || process.env.AWS_PROFILE || 'dev';
+
+console.log(`Running claudia-local-api with environment settings [${environment}]`);
+
 describe('Unit tests for lib/index', function () {
     context('Testing getDefaultConfig', function () {
         it('CASE 1: Should return required fields for default config', function () {
@@ -92,7 +96,7 @@ describe('Unit tests for lib/index', function () {
                     httpMethod: req.method
                 },
                 stageVariables: {
-                    environment: 'dev'
+                    environment: environment
                 },
                 headers: req.headers,
                 pathParameters: {},
@@ -229,7 +233,7 @@ describe('Unit tests for lib/index', function () {
                     httpMethod: req.method
                 },
                 stageVariables: {
-                    environment: 'dev'
+                    environment: environment
                 },
                 headers: req.headers,
                 pathParameters: {},
